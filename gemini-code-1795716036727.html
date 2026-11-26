@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Posada de Sánchez y amigos FC</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <style>
+    body {
+      font-family: 'Montserrat', sans-serif;
+      background-color: #0b2e19;
+      /* Textura sutil de césped de cancha */
+      background-image: 
+        repeating-linear-gradient(
+          0deg,
+          rgba(255, 255, 255, 0.03) 0px,
+          rgba(255, 255, 255, 0.03) 40px,
+          rgba(0, 0, 0, 0.08) 40px,
+          rgba(0, 0, 0, 0.08) 80px
+        ),
+        radial-gradient(circle at 50% 20%, #155730 0%, #092615 100%);
+      color: #f8fafc;
+      overflow-x: hidden;
+    }
+
+    .font-serif-title {
+      font-family: 'Playfair Display', serif;
+    }
+
+    /* Animación de patada hacia la portería */
+    @keyframes kickGoal {
+      0% {
+        transform: translateY(0) scale(1) rotate(0deg);
+      }
+      40% {
+        transform: translateY(-130px) scale(0.75) rotate(240deg);
+      }
+      75% {
+        transform: translateY(-210px) scale(0.45) rotate(540deg);
+      }
+      100% {
+        transform: translateY(-195px) scale(0.42) rotate(620deg);
+      }
+    }
+
+    .ball-kicked {
+      animation: kickGoal 0.95s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    }
+
+    @keyframes pulseGlow {
+      0%, 100% { box-shadow: 0 0 20px rgba(250, 204, 21, 0.4); }
+      50% { box-shadow: 0 0 35px rgba(250, 204, 21, 0.8); }
+    }
+
+    .ball-idle {
+      animation: pulseGlow 2.2s infinite ease-in-out;
+    }
+
+    /* Nieve sutil decorativa */
+    .snowflake {
+      position: fixed;
+      top: -10px;
+      color: rgba(255, 255, 255, 0.25);
+      user-select: none;
+      pointer-events: none;
+      z-index: 1;
+      animation: fall linear infinite;
+    }
+
+    @keyframes fall {
+      to {
+        transform: translateY(105vh) rotate(360deg);
+      }
+    }
+
+    .glass-card {
+      background: rgba(10, 38, 22, 0.72);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.14);
+    }
+  </style>
+</head>
+<body class="min-h-screen relative selection:bg-amber-400 selection:text-emerald-950">
+
+  <!-- Contenedor de copos de nieve sutiles -->
+  <div id="snow-container"></div>
+
+  <!-- PANTALLA 1: PENALTI INTERACTIVO -->
+  <section id="intro-screen" class="min-h-screen flex flex-col items-center justify-between py-12 px-4 relative z-10 transition-opacity duration-700">
+    
+    <!-- Encabezado sutil -->
+    <div class="text-center space-y-2 mt-2">
+      <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold tracking-widest uppercase bg-red-600/20 text-red-300 border border-red-500/30">
+        🎄 Edición Navideña 2026 ⚽
+      </span>
+      <h1 class="font-serif-title text-3xl sm:text-4xl font-bold text-white tracking-wide drop-shadow">
+        Sánchez y Amigos FC
+      </h1>
+    </div>
+
+    <!-- Cancha, Portería y Balón -->
+    <div class="w-full max-w-md flex flex-col items-center justify-center my-auto relative">
+      
+      <!-- Portería en el fondo -->
+      <div class="w-72 sm:w-80 h-36 border-t-4 border-x-4 border-white/90 rounded-t-sm relative flex items-end justify-center shadow-[0_-10px_30px_rgba(255,255,255,0.12)] bg-white/5">
+        <!-- Red de la portería -->
+        <div class="absolute inset-0 opacity-25" style="background-image: linear-gradient(to right, #fff 1px, transparent 1px), linear-gradient(to bottom, #fff 1px, transparent 1px); background-size: 16px 16px;"></div>
+        
+        <!-- Guirnalda navideña en el travesaño -->
+        <div class="absolute -top-3 inset-x-0 flex justify-around text-sm select-none">
+          <span>🎄</span><span>✨</span><span>🔴</span><span>✨</span><span>🟡</span><span>✨</span><span>🎄</span>
+        </div>
+
+        <!-- Mensaje de GOOOL al anotar -->
+        <div id="goal-banner" class="opacity-0 scale-75 transition-all duration-300 mb-6 px-4 py-1.5 rounded-full bg-amber-400 text-emerald-950 font-extrabold text-sm tracking-widest uppercase shadow-lg">
+          ¡GOOOOL! Entrando...
+        </div>
+      </div>
+
+      <!-- Área chica / Líneas de cancha -->
+      <div class="w-80 sm:w-96 h-48 border-x-2 border-b-2 border-white/30 relative flex flex-col items-center justify-end pb-6">
+        <!-- Punto penal -->
+        <div class="w-3 h-3 rounded-full bg-white/60 mb-3"></div>
+
+        <!-- Balón de fútbol interactivo -->
+        <button id="soccer-ball" onclick="kickBall()" aria-label="Patear balón para abrir invitación"
+          class="ball-idle w-20 h-20 rounded-full bg-white text-slate-900 flex items-center justify-center shadow-2xl cursor-pointer hover:scale-110 active:scale-95 transition-transform relative z-20 border-2 border-slate-200">
+          <!-- SVG Balón Clásico -->
+          <svg viewBox="0 0 100 100" class="w-full h-full p-0.5">
+            <circle cx="50" cy="50" r="48" fill="#ffffff" stroke="#1e293b" stroke-width="2"/>
+            <polygon points="50,30 68,43 61,64 39,64 32,43" fill="#0f172a"/>
+            <polygon points="50,2 64,14 50,22 36,14" fill="#0f172a"/>
+            <polygon points="95,36 86,52 75,44 80,28" fill="#0f172a"/>
+            <polygon points="82,84 65,84 63,71 77,63" fill="#0f172a"/>
+            <polygon points="18,84 35,84 37,71 23,63" fill="#0f172a"/>
+            <polygon points="5,36 14,52 25,44 20,28" fill="#0f172a"/>
+            <line x1="50" y1="30" x2="50" y2="22" stroke="#0f172a" stroke-width="2.5"/>
+            <line x1="68" y1="43" x2="75" y2="44" stroke="#0f172a" stroke-width="2.5"/>
+            <line x1="61" y1="64" x2="63" y2="71" stroke="#0f172a" stroke-width="2.5"/>
+            <line x1="39" y1="64" x2="37" y2="71" stroke="#0f172a" stroke-width="2.5"/>
+            <line x1="32" y1="43" x2="25" y2="44" stroke="#0f172a" stroke-width="2.5"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Instrucción -->
+    <div class="text-center mb-4">
+      <p class="text-sm sm:text-base font-medium text-emerald-100 animate-bounce">
+        👆 Toca el balón y mete gol para abrir tu invitación
+      </p>
+    </div>
+  </section>
+
+  <!-- PANTALLA 2: CONTENIDO DE LA INVITACIÓN -->
+  <main id="invitation-content" class="hidden opacity-0 transition-opacity duration-1000 max-w-2xl mx-auto px-4 py-12 space-y-8 relative z-10">
+
+    <!-- Tarjeta Principal / Hero -->
+    <header class="glass-card rounded-3xl p-8 text-center relative overflow-hidden shadow-2xl">
+      <div class="absolute top-0 inset-x-0 h-1.5 bg-gradient-to-r from-red-500 via-amber-400 to-emerald-400"></div>
+      
+      <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full text-xs font-bold tracking-widest uppercase bg-amber-400/15 text-amber-300 border border-amber-400/30 mb-4">
+        ⚽ Convocatoria Oficial • Navidad 2026 🎄
+      </div>
+
+      <h1 class="font-serif-title text-3xl sm:text-5xl font-bold text-white leading-tight mb-3">
+        Posada de Sánchez y amigos FC
+      </h1>
+      <p class="text-emerald-200/90 text-sm sm:text-base max-w-md mx-auto">
+        Cerramos la temporada como se debe: buen ambiente, amigos y espíritu navideño.
+      </p>
+
+      <!-- Detalles clave en Grid -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-8 text-left">
+        <div class="bg-white/5 border border-white/10 rounded-2xl p-4 flex items-start gap-3.5">
+          <div class="p-2.5 rounded-xl bg-red-500/20 text-red-300 shrink-0">
+            <i data-lucide="calendar" class="w-5 h-5"></i>
+          </div>
+          <div>
+            <p class="text-xs uppercase tracking-wider text-emerald-300/70 font-semibold">Fecha</p>
+            <p class="font-bold text-white text-sm sm:text-base">28 de noviembre, 2026</p>
+          </div>
+        </div>
+
+        <div class="bg-white/5 border border-white/10 rounded-2xl p-4 flex items-start gap-3.5">
+          <div class="p-2.5 rounded-xl bg-amber-500/20 text-amber-300 shrink-0">
+            <i data-lucide="clock" class="w-5 h-5"></i>
+          </div>
+          <div>
+            <p class="text-xs uppercase tracking-wider text-emerald-300/70 font-semibold">Hora del silbatazo</p>
+            <p class="font-bold text-white text-sm sm:text-base">7:00 PM</p>
+          </div>
+        </div>
+
+        <div class="bg-white/5 border border-white/10 rounded-2xl p-4 flex items-start gap-3.5">
+          <div class="p-2.5 rounded-xl bg-emerald-500/20 text-emerald-300 shrink-0">
+            <i data-lucide="shirt" class="w-5 h-5"></i>
+          </div>
+          <div>
+            <p class="text-xs uppercase tracking-wider text-emerald-300/70 font-semibold">Dress Code</p>
+            <p class="font-bold text-white text-sm sm:text-base">Smart-Casual</p>
+          </div>
+        </div>
+
+        <div class="bg-white/5 border border-white/10 rounded-2xl p-4 flex items-start gap-3.5">
+          <div class="p-2.5 rounded-xl bg-sky-500/20 text-sky-300 shrink-0">
+            <i data-lucide="map-pin" class="w-5 h-5"></i>
+          </div>
+          <div>
+            <p class="text-xs uppercase tracking-wider text-emerald-300/70 font-semibold">Estadio / Sede</p>
+            <p class="font-bold text-white text-sm sm:text-base">Quinta Gemma</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Botón de Mapa (Listo para reemplazar el enlace) -->
+      <div class="mt-6">
+        <!-- REEMPLAZA EL HREF CON TU LINK DE GOOGLE MAPS CUANDO LO TENGAS -->
+        <a id="maps-link" href="https://maps.google.com/?q=Quinta+Gemma" target="_blank" rel="noopener noreferrer"
+          class="inline-flex items-center justify-center gap-2 w-full sm:w-auto px-6 py-3 rounded-xl bg-white text-emerald-950 font-bold text-sm hover:bg-amber-300 transition-colors shadow-lg">
+          <i data-lucide="navigation" class="w-4 h-4"></i>
+          Cómo llegar a Quinta Gemma
+        </a>
+        <p class="text-[11px] text-emerald-300/60 mt-2">
+          * Ubicación exacta disponible en el botón de arriba
+        </p>
+      </div>
+    </header>
+
+    <!-- CONFIRMACIÓN DE ASISTENCIA (RSVP) -->
+    <section class="glass-card rounded-3xl p-6 sm:p-8 shadow-xl">
+      <div class="text-center mb-6">
+        <span class="text-2xl">🥂</span>
+        <h2 class="font-serif-title text-2xl sm:text-3xl font-bold text-white mt-1">
+          Me encantaría celebrar contigo
+        </h2>
+        <p class="text-emerald-200/85 text-sm mt-1">
+          Cuéntame si podrás acompañarnos
+        </p>
+      </div>
+
+      <form id="rsvp-form" onsubmit="handleRSVP(event)" class="space-y-4">
+        <div>
+          <label for="guest-name" class="block text-xs font-semibold uppercase tracking-wider text-emerald-200 mb-1.5">
+            Tu nombre o apodo
+          </label>
+          <input type="text" id="guest-name" required placeholder="Ej. Carlos Sánchez"
+            class="w-full px-4 py-3 rounded-xl bg-white/10 border border-white/20 text-white placeholder-emerald-300/40 focus:outline-none focus:border-amber-400 transition-colors" />
+        </div>
+
+        <div class="grid grid-cols-2 gap-3">
+          <label class="cursor-pointer">
+            <input type="radio" name="attendance" value="yes" class="peer sr-only" checked />
+            <div class="p-3.5 rounded-xl border border-white/15 bg-white/5 text-center peer-checked:bg-emerald-500/30 peer-checked:border-emerald-400 transition-all">
+              <span class="block text-lg mb-0.5">⚽</span>
+              <span class="text-xs sm:text-sm font-bold text-white">¡Ahí nos vemos!</span>
+            </div>
+          </label>
+
+          <label class="cursor-pointer">
+            <input type="radio" name="attendance" value="no" class="peer sr-only" />
+            <div class="p-3.5 rounded-xl border border-white/15 bg-white/5 text-center peer-checked:bg-red-500/30 peer-checked:border-red-400 transition-all">
+              <span class="block text-lg mb-0.5">🟥</span>
+              <span class="text-xs sm:text-sm font-bold text-white">No podré ir</span>
+            </div>
+          </label>
+        </div>
+
+        <button type="submit"
+          class="w-full py-3.5 rounded-xl bg-gradient-to-r from-amber-400 to-amber-500 text-emerald-950 font-extrabold text-sm uppercase tracking-wider hover:brightness-110 transition-all shadow-lg cursor-pointer">
+          Enviar confirmación
+        </button>
+      </form>
+
+      <div id="rsvp-feedback" class="hidden mt-4 p-3 rounded-xl bg-emerald-500/20 border border-emerald-400/40 text-center text-sm text-emerald-100 font-medium"></div>
+    </section>
+
+    <!-- SECCIÓN VI: PREMIACIÓN ANÓNIMA MACANAZOS -->
+    <section class="glass-card rounded-3xl p-6 sm:p-8 shadow-xl relative overflow-hidden">
+      <div class="flex items-center gap-3 mb-4">
+        <span class="px-2.5 py-1 rounded-lg bg-amber-400/20 text-amber-300 font-extrabold text-xs tracking-wider">
+          VI
+        </span>
+        <h2 class="font-serif-title text-2xl font-bold text-white">
+          Premiación Anónima: Macanazos
+        </h2>
+      </div>
+
+      <p class="text-emerald-200/85 text-sm mb-5 leading-relaxed">
+        Nadie se salva. Deja tu nominación anónima para los momentos más épicos, osos o jugadas del año en el equipo.
+      </p>
+
+      <form id="macanazo-form" onsubmit="handleMacanazo(event)" class="space-y-4">
+        <div>
+          <label for="nominee" class="block text-xs font-semibold uppercase tracking-wider text-emerald-200 mb-1.5">
+            ¿A quién nominas?
+          </label>
+          <input type="text" id="nominee" required placeholder="Nombre del nominado..."
+            class="w-full px-4 py-2.5 rounded-xl bg-white/10 border border-white/20 text-white placeholder-emerald-300/40 focus:outline-none focus:border-amber-400 text-sm" />
+        </div>
+
+        <div>
+          <label for="reason" class="block text-xs font-semibold uppercase tracking-wider text-emerald-200 mb-1.5">
+            Categoría o motivo del Macanazo
+          </label>
+          <textarea id="reason" rows="3" required placeholder="Ej. Premio al que siempre llega tarde pero con actitud / El fallo del año..."
+            class="w-full px-4 py-2.5 rounded-xl bg-white/10 border border-white/20 text-white placeholder-emerald-300/40 focus:outline-none focus:border-amber-400 text-sm"></textarea>
+        </div>
+
+        <button type="submit"
+          class="w-full py-3 rounded-xl bg-red-600 hover:bg-red-500 text-white font-bold text-sm uppercase tracking-wider transition-colors shadow-md flex items-center justify-center gap-2 cursor-pointer">
+          <i data-lucide="trophy" class="w-4 h-4 text-amber-300"></i>
+          Enviar nominación secreta
+        </button>
+      </form>
+
+      <div id="macanazo-feedback" class="hidden mt-4 p-3 rounded-xl bg-amber-400/20 border border-amber-400/40 text-center text-sm text-amber-200 font-medium">
+        🏆 ¡Nominación anónima registrada en el VAR!
+      </div>
+    </section>
+
+    <!-- SECCIÓN VIII: LA MESA - QUIÉNES VIENEN -->
+    <section class="glass-card rounded-3xl p-6 sm:p-8 shadow-xl">
+      <div class="flex items-center justify-between mb-4">
+        <div class="flex items-center gap-3">
+          <span class="px-2.5 py-1 rounded-lg bg-emerald-400/20 text-emerald-300 font-extrabold text-xs tracking-wider">
+            VIII
+          </span>
+          <h2 class="font-serif-title text-2xl font-bold text-white">
+            La Mesa: Quiénes vienen
+          </h2>
+        </div>
+        <span id="attendee-count" class="px-3 py-1 rounded-full bg-white/10 text-xs font-bold text-amber-300">
+          0 convocados
+        </span>
+      </div>
+
+      <p class="text-emerald-200/80 text-sm mb-5">
+        Alineación confirmada para la noche del 28 de noviembre:
+      </p>
+
+      <ul id="attendees-list" class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+        <!-- Se llena dinámicamente con JS -->
+      </ul>
+
+      <p id="empty-list-msg" class="text-center text-sm text-emerald-300/60 py-4 italic">
+        Aún no hay confirmados en la lista. ¡Sé el primero en confirmar arriba!
+      </p>
+    </section>
+
+    <!-- MENSAJE FINAL -->
+    <footer class="text-center pt-4 pb-10 space-y-3">
+      <div class="inline-block p-3 rounded-full bg-white/5 border border-white/10 text-2xl">
+        🎄⚽🍻
+      </div>
+      <p class="font-serif-title text-2xl sm:text-3xl font-bold text-amber-300 drop-shadow">
+        "Te esperamos. El que no vaya paga la cancha"
+      </p>
+      <p class="text-xs text-emerald-300/60 tracking-widest uppercase">
+        Sánchez y Amigos FC • Temporada 2026
+      </p>
+    </footer>
+
+  </main>
+
+  <script>
+    // Inicializar iconos Lucide
+    lucide.createIcons();
+
+    // Generar nieve sutil navideña
+    function createSnow() {
+      const container = document.getElementById('snow-container');
+      const flakes = ['❄', '•', '✦'];
+      for (let i = 0; i < 22; i++) {
+        const flake = document.createElement('div');
+        flake.className = 'snowflake';
+        flake.textContent = flakes[Math.floor(Math.random() * flakes.length)];
+        flake.style.left = Math.random() * 100 + 'vw';
+        flake.style.fontSize = (Math.random() * 10 + 10) + 'px';
+        flake.style.animationDuration = (Math.random() * 8 + 7) + 's';
+        flake.style.animationDelay = (Math.random() * 5) + 's';
+        container.appendChild(flake);
+      }
+    }
+    createSnow();
+
+    // Lógica del disparo a gol
+    let kicked = false;
+    function kickBall() {
+      if (kicked) return;
+      kicked = true;
+
+      const ball = document.getElementById('soccer-ball');
+      const goalBanner = document.getElementById('goal-banner');
+      const introScreen = document.getElementById('intro-screen');
+      const invitationContent = document.getElementById('invitation-content');
+
+      ball.classList.remove('ball-idle');
+      ball.classList.add('ball-kicked');
+
+      setTimeout(() => {
+        goalBanner.classList.remove('opacity-0', 'scale-75');
+        goalBanner.classList.add('opacity-100', 'scale-100');
+      }, 550);
+
+      setTimeout(() => {
+        introScreen.classList.add('opacity-0');
+        setTimeout(() => {
+          introScreen.classList.add('hidden');
+          invitationContent.classList.remove('hidden');
+          // Forzar reflow para transición suave
+          void invitationContent.offsetWidth;
+          invitationContent.classList.remove('opacity-0');
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }, 600);
+      }, 1350);
+    }
+
+    // Manejo de lista de invitados (LocalStorage como base lista para conectar DB)
+    const STORAGE_KEY = 'posada_sanchez_fc_guests';
+
+    function getGuests() {
+      const data = localStorage.getItem(STORAGE_KEY);
+      return data ? JSON.parse(data) : [];
+    }
+
+    function renderGuests() {
+      const guests = getGuests();
+      const listEl = document.getElementById('attendees-list');
+      const countEl = document.getElementById('attendee-count');
+      const emptyMsg = document.getElementById('empty-list-msg');
+
+      listEl.innerHTML = '';
+      countEl.textContent = `${guests.length} ${guests.length === 1 ? 'convocado' : 'convocados'}`;
+
+      if (guests.length === 0) {
+        emptyMsg.classList.remove('hidden');
+      } else {
+        emptyMsg.classList.add('hidden');
+        guests.forEach((guest, index) => {
+          const li = document.createElement('li');
+          li.className = 'flex items-center gap-3 px-4 py-2.5 rounded-xl bg-white/10 border border-white/10 text-sm font-semibold text-white';
+          li.innerHTML = `
+            <span class="w-6 h-6 rounded-full bg-amber-400 text-emerald-950 font-extrabold text-xs flex items-center justify-center shrink-0">
+              ${index + 1}
+            </span>
+            <span class="truncate">${escapeHTML(guest)}</span>
+            <span class="ml-auto text-xs">⚽</span>
+          `;
+          listEl.appendChild(li);
+        });
+      }
+    }
+
+    function handleRSVP(e) {
+      e.preventDefault();
+      const nameInput = document.getElementById('guest-name');
+      const attendance = document.querySelector('input[name="attendance"]:checked').value;
+      const feedback = document.getElementById('rsvp-feedback');
+      const name = nameInput.value.trim();
+
+      if (!name) return;
+
+      if (attendance === 'yes') {
+        const guests = getGuests();
+        if (!guests.some(g => g.toLowerCase() === name.toLowerCase())) {
+          guests.push(name);
+          localStorage.setItem(STORAGE_KEY, JSON.stringify(guests));
+        }
+        renderGuests();
+        feedback.textContent = `¡Excelente, ${name}! Ya estás en la alineación titular.`;
+        feedback.className = 'mt-4 p-3 rounded-xl bg-emerald-500/20 border border-emerald-400/40 text-center text-sm text-emerald-100 font-medium';
+      } else {
+        feedback.textContent = `Qué lástima, ${name}. ¡Recuerda que el que no va paga la cancha! 😉`;
+        feedback.className = 'mt-4 p-3 rounded-xl bg-red-500/20 border border-red-400/40 text-center text-sm text-red-200 font-medium';
+      }
+
+      feedback.classList.remove('hidden');
+      nameInput.value = '';
+    }
+
+    // Manejo de nominaciones Macanazos
+    function handleMacanazo(e) {
+      e.preventDefault();
+      const nomineeInput = document.getElementById('nominee');
+      const reasonInput = document.getElementById('reason');
+      const feedback = document.getElementById('macanazo-feedback');
+
+      // Guardado local (puedes conectarlo a Formspree, Google Sheets o Firebase fácilmente)
+      const macanazos = JSON.parse(localStorage.getItem('posada_macanazos') || '[]');
+      macanazos.push({
+        nominee: nomineeInput.value.trim(),
+        reason: reasonInput.value.trim(),
+        date: new Date().toISOString()
+      });
+      localStorage.setItem('posada_macanazos', JSON.stringify(macanazos));
+
+      nomineeInput.value = '';
+      reasonInput.value = '';
+      feedback.classList.remove('hidden');
+      setTimeout(() => feedback.classList.add('hidden'), 4000);
+    }
+
+    function escapeHTML(str) {
+      return str.replace(/[&<>'"]/g, tag => ({
+        '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;'
+      }[tag]));
+    }
+
+    // Cargar lista al iniciar
+    renderGuests();
+  </script>
+</body>
+</html>
