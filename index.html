@@ -89,10 +89,10 @@
 
     @keyframes pulseGlow3D {
       0%, 100% {
-        filter: drop-shadow(0 12px 14px rgba(0, 0, 0, 0.55)) drop-shadow(0 0 12px rgba(251, 191, 36, 0.35));
+        filter: drop-shadow(0 12px 14px rgba(0, 0, 0, 0.55)) drop-shadow(0 0 10px rgba(251, 191, 36, 0.3));
       }
       50% {
-        filter: drop-shadow(0 14px 18px rgba(0, 0, 0, 0.65)) drop-shadow(0 0 22px rgba(251, 191, 36, 0.65));
+        filter: drop-shadow(0 14px 18px rgba(0, 0, 0, 0.65)) drop-shadow(0 0 20px rgba(251, 191, 36, 0.6));
       }
     }
 
@@ -165,53 +165,75 @@
         </div>
       </div>
 
-      <!-- Área chica y Balón 3D -->
+      <!-- Área chica y Balón -->
       <div class="w-80 sm:w-96 h-48 border-x-2 border-b-2 border-white/25 relative flex flex-col items-center justify-end pb-5">
         <div class="w-16 h-4 rounded-full bg-black/45 blur-sm -mb-2"></div>
         <div class="w-2.5 h-2.5 rounded-full bg-white/55 mb-2"></div>
 
         <button id="soccer-ball" onclick="kickBall()" aria-label="Patear balón para abrir invitación"
           class="ball-idle w-24 h-24 rounded-full flex items-center justify-center cursor-pointer hover:scale-105 active:scale-95 transition-transform relative z-20 focus:outline-none">
-          <svg viewBox="0 0 120 120" class="w-full h-full">
+          <svg viewBox="0 0 200 200" class="w-full h-full">
             <defs>
-              <radialGradient id="ballSphere3D" cx="35%" cy="28%" r="70%">
-                <stop offset="0%" stop-color="#ffffff" />
-                <stop offset="55%" stop-color="#f1f5f9" />
-                <stop offset="85%" stop-color="#cbd5e1" />
-                <stop offset="100%" stop-color="#64748b" />
+              <radialGradient id="ballEdgeShade" cx="42%" cy="35%" r="65%">
+                <stop offset="0%" stop-color="rgba(255,255,255,0.18)" />
+                <stop offset="72%" stop-color="rgba(0,0,0,0)" />
+                <stop offset="100%" stop-color="rgba(0,0,0,0.35)" />
               </radialGradient>
-              <radialGradient id="ballSpecular" cx="32%" cy="24%" r="35%">
-                <stop offset="0%" stop-color="rgba(255,255,255,0.95)" />
-                <stop offset="100%" stop-color="rgba(255,255,255,0)" />
-              </radialGradient>
-              <radialGradient id="ballInnerShadow" cx="55%" cy="55%" r="52%">
-                <stop offset="68%" stop-color="rgba(15,23,42,0)" />
-                <stop offset="100%" stop-color="rgba(15,23,42,0.48)" />
-              </radialGradient>
-              <clipPath id="ballClip">
-                <circle cx="60" cy="60" r="52" />
+              <clipPath id="classicBallClip">
+                <circle cx="100" cy="100" r="94" />
               </clipPath>
             </defs>
 
-            <circle cx="60" cy="60" r="52" fill="url(#ballSphere3D)" />
-            <g clip-path="url(#ballClip)">
-              <polygon points="60,38 79,52 72,75 48,75 41,52" fill="#1e293b" />
-              <polygon points="60,6 76,18 60,28 44,18" fill="#1e293b" />
-              <polygon points="110,44 99,62 86,53 92,35" fill="#1e293b" />
-              <polygon points="94,98 75,98 73,83 88,74" fill="#1e293b" />
-              <polygon points="26,98 45,98 47,83 32,74" fill="#1e293b" />
-              <polygon points="10,44 21,62 34,53 28,35" fill="#1e293b" />
-              <g stroke="#334155" stroke-width="2.2" stroke-linecap="round">
-                <line x1="60" y1="38" x2="60" y2="28" />
-                <line x1="79" y1="52" x2="86" y2="53" />
-                <line x1="72" y1="75" x2="73" y2="83" />
-                <line x1="48" y1="75" x2="47" y2="83" />
-                <line x1="41" y1="52" x2="34" y2="53" />
+            <g clip-path="url(#classicBallClip)">
+              <!-- Fondo blanco base -->
+              <circle cx="100" cy="100" r="94" fill="#ffffff" />
+
+              <!-- Pentágono central oscuro -->
+              <polygon points="100,67 131,90 119,127 81,127 69,90" fill="#1e2022" />
+
+              <!-- Radios hacia los hexágonos -->
+              <g stroke="#1e2022" stroke-width="6.5" stroke-linecap="round">
+                <line x1="100" y1="67" x2="100" y2="43" />
+                <line x1="131" y1="90" x2="154" y2="82" />
+                <line x1="119" y1="127" x2="133" y2="147" />
+                <line x1="81" y1="127" x2="67" y2="147" />
+                <line x1="69" y1="90" x2="46" y2="82" />
               </g>
-              <circle cx="60" cy="60" r="52" fill="url(#ballInnerShadow)" />
-              <ellipse cx="43" cy="33" rx="22" ry="13" transform="rotate(-25 43 33)" fill="url(#ballSpecular)" />
+
+              <!-- Secciones oscuras alrededor del perímetro (como en el diseño) -->
+              <!-- Superior -->
+              <path d="M 52,16 Q 100,32 148,16 L 164,34 L 134,47 L 100,43 L 66,47 L 36,34 Z" fill="#1e2022" />
+              <!-- Superior izquierda -->
+              <path d="M 10,86 L 26,48 L 46,82 L 35,115 L 14,112 Z" fill="#1e2022" />
+              <!-- Superior derecha -->
+              <path d="M 190,86 L 174,48 L 154,82 L 165,115 L 186,112 Z" fill="#1e2022" />
+              <!-- Inferior izquierda -->
+              <path d="M 24,154 L 46,125 L 67,147 L 57,176 L 38,172 Z" fill="#1e2022" />
+              <!-- Inferior derecha -->
+              <path d="M 176,154 L 154,125 L 133,147 L 143,176 L 162,172 Z" fill="#1e2022" />
+              <!-- Inferior central -->
+              <path d="M 68,188 L 86,167 L 114,167 L 132,188 Q 100,196 68,188 Z" fill="#1e2022" />
+
+              <!-- Contornos de los hexágonos internos -->
+              <g fill="none" stroke="#1e2022" stroke-width="5.5" stroke-linejoin="round">
+                <!-- Hexágono superior izquierdo -->
+                <path d="M 66,47 L 100,43 L 100,67 L 69,90 L 46,82 L 36,34 Z" />
+                <!-- Hexágono superior derecho -->
+                <path d="M 100,43 L 134,47 L 164,34 L 154,82 L 131,90 L 100,67 Z" />
+                <!-- Hexágono inferior izquierdo -->
+                <path d="M 46,82 L 69,90 L 81,127 L 67,147 L 46,125 L 35,115 Z" />
+                <!-- Hexágono inferior derecho -->
+                <path d="M 131,90 L 154,82 L 165,115 L 154,125 L 133,147 L 119,127 Z" />
+                <!-- Hexágono inferior -->
+                <path d="M 81,127 L 119,127 L 133,147 L 114,167 L 86,167 L 67,147 Z" />
+              </g>
+
+              <!-- Sombra esférica sutil -->
+              <circle cx="100" cy="100" r="94" fill="url(#ballEdgeShade)" />
             </g>
-            <circle cx="60" cy="60" r="52" fill="none" stroke="rgba(255,255,255,0.45)" stroke-width="1.2" />
+
+            <!-- Aro exterior del balón -->
+            <circle cx="100" cy="100" r="94" fill="none" stroke="#1e2022" stroke-width="6" />
           </svg>
         </button>
       </div>
