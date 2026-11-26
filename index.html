@@ -13,7 +13,6 @@
     body {
       font-family: 'Montserrat', sans-serif;
       background-color: #0b2e19;
-      /* Textura sutil de césped de cancha */
       background-image: 
         repeating-linear-gradient(
           0deg,
@@ -128,13 +127,11 @@
 </head>
 <body class="min-h-screen relative selection:bg-amber-400 selection:text-emerald-950">
 
-  <!-- Contenedor de copos de nieve sutiles -->
   <div id="snow-container"></div>
 
   <!-- PANTALLA 1: PENALTI INTERACTIVO -->
   <section id="intro-screen" class="min-h-screen flex flex-col items-center justify-between pt-10 pb-12 px-4 relative z-10 transition-opacity duration-700">
     
-    <!-- Encabezado con buen margen inferior para separarse de la portería -->
     <div class="text-center space-y-3 mb-10 sm:mb-14">
       <span class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full text-xs font-semibold tracking-widest uppercase bg-red-600/20 text-red-200 border border-red-500/30">
         🎄 Edición Navideña 2026 ⚽
@@ -144,93 +141,66 @@
       </h1>
     </div>
 
-    <!-- Cancha, Portería 3D y Balón 3D -->
     <div class="w-full max-w-md flex flex-col items-center justify-center my-auto relative">
       
-      <!-- Portería 3D en el fondo -->
+      <!-- Portería 3D -->
       <div class="goal-scene w-72 sm:w-80 h-36 relative flex items-end justify-center">
         <div class="goal-3d w-full h-full relative flex items-end justify-center">
-          
-          <!-- Fondo de red con profundidad -->
           <div class="goal-net-back absolute inset-x-2 top-1 bottom-0 border border-white/20 rounded-t-sm"></div>
-
-          <!-- Laterales de red en perspectiva -->
           <div class="goal-net-side w-8 h-full border-l border-t border-white/25 origin-left" style="transform: rotateY(55deg);"></div>
           <div class="goal-net-side flex-1 h-full border-t border-white/20"></div>
           <div class="goal-net-side w-8 h-full border-r border-t border-white/25 origin-right" style="transform: rotateY(-55deg);"></div>
 
-          <!-- Poste izquierdo 3D -->
           <div class="goal-post-v absolute left-0 top-0 bottom-0 w-2.5 rounded-t-full z-10"></div>
-          <!-- Poste derecho 3D -->
           <div class="goal-post-v absolute right-0 top-0 bottom-0 w-2.5 rounded-t-full z-10"></div>
-          <!-- Travesaño superior 3D -->
           <div class="goal-post-h absolute top-0 inset-x-0 h-2.5 rounded-full z-20"></div>
 
-          <!-- Guirnalda navideña sobre el travesaño -->
           <div class="absolute -top-4 inset-x-1 flex justify-around text-sm select-none z-30 drop-shadow">
             <span>🎄</span><span>✨</span><span>🔴</span><span>✨</span><span>🟡</span><span>✨</span><span>🎄</span>
           </div>
 
-          <!-- Mensaje de GOOOL al anotar -->
           <div id="goal-banner" class="opacity-0 scale-75 transition-all duration-300 mb-7 px-4 py-1.5 rounded-full bg-amber-400 text-emerald-950 font-extrabold text-sm tracking-widest uppercase shadow-xl z-30">
             ¡GOOOOL! Entrando...
           </div>
         </div>
       </div>
 
-      <!-- Área chica / Líneas de cancha -->
+      <!-- Área chica y Balón 3D -->
       <div class="w-80 sm:w-96 h-48 border-x-2 border-b-2 border-white/25 relative flex flex-col items-center justify-end pb-5">
-        <!-- Sombra proyectada en el césped -->
         <div class="w-16 h-4 rounded-full bg-black/45 blur-sm -mb-2"></div>
-
-        <!-- Punto penal -->
         <div class="w-2.5 h-2.5 rounded-full bg-white/55 mb-2"></div>
 
-        <!-- Balón de fútbol 3D interactivo -->
         <button id="soccer-ball" onclick="kickBall()" aria-label="Patear balón para abrir invitación"
           class="ball-idle w-24 h-24 rounded-full flex items-center justify-center cursor-pointer hover:scale-105 active:scale-95 transition-transform relative z-20 focus:outline-none">
           <svg viewBox="0 0 120 120" class="w-full h-full">
             <defs>
-              <!-- Sombreado esférico 3D del balón -->
               <radialGradient id="ballSphere3D" cx="35%" cy="28%" r="70%">
                 <stop offset="0%" stop-color="#ffffff" />
                 <stop offset="55%" stop-color="#f1f5f9" />
                 <stop offset="85%" stop-color="#cbd5e1" />
                 <stop offset="100%" stop-color="#64748b" />
               </radialGradient>
-
-              <!-- Brillo especular superior -->
               <radialGradient id="ballSpecular" cx="32%" cy="24%" r="35%">
                 <stop offset="0%" stop-color="rgba(255,255,255,0.95)" />
                 <stop offset="100%" stop-color="rgba(255,255,255,0)" />
               </radialGradient>
-
-              <!-- Sombra interna de curvatura -->
               <radialGradient id="ballInnerShadow" cx="55%" cy="55%" r="52%">
                 <stop offset="68%" stop-color="rgba(15,23,42,0)" />
                 <stop offset="100%" stop-color="rgba(15,23,42,0.48)" />
               </radialGradient>
-
               <clipPath id="ballClip">
                 <circle cx="60" cy="60" r="52" />
               </clipPath>
             </defs>
 
-            <!-- Base esférica -->
             <circle cx="60" cy="60" r="52" fill="url(#ballSphere3D)" />
-
-            <!-- Gajos y costuras con clip esférico -->
             <g clip-path="url(#ballClip)">
-              <!-- Pentágono central -->
               <polygon points="60,38 79,52 72,75 48,75 41,52" fill="#1e293b" />
-              <!-- Gajos periféricos -->
               <polygon points="60,6 76,18 60,28 44,18" fill="#1e293b" />
               <polygon points="110,44 99,62 86,53 92,35" fill="#1e293b" />
               <polygon points="94,98 75,98 73,83 88,74" fill="#1e293b" />
               <polygon points="26,98 45,98 47,83 32,74" fill="#1e293b" />
               <polygon points="10,44 21,62 34,53 28,35" fill="#1e293b" />
-
-              <!-- Costuras -->
               <g stroke="#334155" stroke-width="2.2" stroke-linecap="round">
                 <line x1="60" y1="38" x2="60" y2="28" />
                 <line x1="79" y1="52" x2="86" y2="53" />
@@ -238,20 +208,15 @@
                 <line x1="48" y1="75" x2="47" y2="83" />
                 <line x1="41" y1="52" x2="34" y2="53" />
               </g>
-
-              <!-- Sombra de curvatura y reflejo de luz -->
               <circle cx="60" cy="60" r="52" fill="url(#ballInnerShadow)" />
               <ellipse cx="43" cy="33" rx="22" ry="13" transform="rotate(-25 43 33)" fill="url(#ballSpecular)" />
             </g>
-
-            <!-- Contorno sutil -->
             <circle cx="60" cy="60" r="52" fill="none" stroke="rgba(255,255,255,0.45)" stroke-width="1.2" />
           </svg>
         </button>
       </div>
     </div>
 
-    <!-- Instrucción -->
     <div class="text-center mt-6">
       <p class="text-sm sm:text-base font-medium text-emerald-100 animate-bounce">
         👆 Toca el balón y mete gol para abrir tu invitación
@@ -262,7 +227,6 @@
   <!-- PANTALLA 2: CONTENIDO DE LA INVITACIÓN -->
   <main id="invitation-content" class="hidden opacity-0 transition-opacity duration-1000 max-w-2xl mx-auto px-4 py-12 space-y-8 relative z-10">
 
-    <!-- Tarjeta Principal / Hero (Barra superior de color sólido dorado) -->
     <header class="glass-card rounded-3xl p-8 text-center relative overflow-hidden shadow-2xl">
       <div class="absolute top-0 inset-x-0 h-1.5 bg-amber-400"></div>
       
@@ -277,7 +241,6 @@
         Cerramos la temporada como se debe: buen ambiente, amigos y espíritu navideño.
       </p>
 
-      <!-- Detalles clave en Grid -->
       <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-8 text-left">
         <div class="bg-white/5 border border-white/10 rounded-2xl p-4 flex items-start gap-3.5">
           <div class="p-2.5 rounded-xl bg-red-500/20 text-red-300 shrink-0">
@@ -320,9 +283,7 @@
         </div>
       </div>
 
-      <!-- Botón de Mapa (Listo para reemplazar el enlace) -->
       <div class="mt-6">
-        <!-- REEMPLAZA EL HREF CON TU LINK DE GOOGLE MAPS CUANDO LO TENGAS -->
         <a id="maps-link" href="https://maps.google.com/?q=Quinta+Gemma" target="_blank" rel="noopener noreferrer"
           class="inline-flex items-center justify-center gap-2 w-full sm:w-auto px-6 py-3 rounded-xl bg-white text-emerald-950 font-bold text-sm hover:bg-amber-300 transition-colors shadow-lg">
           <i data-lucide="navigation" class="w-4 h-4"></i>
@@ -346,7 +307,7 @@
         </p>
       </div>
 
-      <form id="rsvp-form" onsubmit="handleRSVP(event)" class="space-y-4">
+      <form id="rsvp-form" class="space-y-4">
         <div>
           <label for="guest-name" class="block text-xs font-semibold uppercase tracking-wider text-emerald-200 mb-1.5">
             Tu nombre o apodo
@@ -373,7 +334,7 @@
           </label>
         </div>
 
-        <button type="submit"
+        <button id="rsvp-submit-btn" type="submit"
           class="w-full py-3.5 rounded-xl bg-amber-400 text-emerald-950 font-extrabold text-sm uppercase tracking-wider hover:bg-amber-300 transition-colors shadow-lg cursor-pointer">
           Enviar confirmación
         </button>
@@ -397,7 +358,7 @@
         Nadie se salva. Deja tu nominación anónima para los momentos más épicos, osos o jugadas del año en el equipo.
       </p>
 
-      <form id="macanazo-form" onsubmit="handleMacanazo(event)" class="space-y-4">
+      <form id="macanazo-form" class="space-y-4">
         <div>
           <label for="nominee" class="block text-xs font-semibold uppercase tracking-wider text-emerald-200 mb-1.5">
             ¿A quién nominas?
@@ -414,7 +375,7 @@
             class="w-full px-4 py-2.5 rounded-xl bg-white/10 border border-white/20 text-white placeholder-emerald-300/40 focus:outline-none focus:border-amber-400 text-sm"></textarea>
         </div>
 
-        <button type="submit"
+        <button id="macanazo-submit-btn" type="submit"
           class="w-full py-3 rounded-xl bg-red-600 hover:bg-red-500 text-white font-bold text-sm uppercase tracking-wider transition-colors shadow-md flex items-center justify-center gap-2 cursor-pointer">
           <i data-lucide="trophy" class="w-4 h-4 text-amber-300"></i>
           Enviar nominación secreta
@@ -446,9 +407,7 @@
         Alineación confirmada para la noche del 28 de noviembre:
       </p>
 
-      <ul id="attendees-list" class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
-        <!-- Se llena dinámicamente con JS -->
-      </ul>
+      <ul id="attendees-list" class="grid grid-cols-1 sm:grid-cols-2 gap-2.5"></ul>
 
       <p id="empty-list-msg" class="text-center text-sm text-emerald-300/60 py-4 italic">
         Aún no hay confirmados en la lista. ¡Sé el primero en confirmar arriba!
@@ -475,11 +434,34 @@
 
   </main>
 
-  <script>
-    // Inicializar iconos Lucide
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+    import {
+      getFirestore,
+      collection,
+      addDoc,
+      onSnapshot,
+      query,
+      orderBy,
+      serverTimestamp
+    } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
     lucide.createIcons();
 
-    // Generar nieve sutil navideña
+    const firebaseConfig = {
+      apiKey: "AIzaSyDPMF8Ck3AjNQO2f6OUdK2UIOHnzDUmad4",
+      authDomain: "posada-sanchez-fc.firebaseapp.com",
+      projectId: "posada-sanchez-fc",
+      storageBucket: "posada-sanchez-fc.firebasestorage.app",
+      messagingSenderId: "587669665273",
+      appId: "1:587669665273:web:d2f33fa69f615a414e3928",
+      measurementId: "G-1BVBK30BWX"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    // Nieve sutil decorativa
     function createSnow() {
       const container = document.getElementById('snow-container');
       const flakes = ['❄', '•', '✦'];
@@ -496,9 +478,9 @@
     }
     createSnow();
 
-    // Lógica del disparo a gol
+    // Disparo a gol
     let kicked = false;
-    function kickBall() {
+    window.kickBall = function () {
       if (kicked) return;
       kicked = true;
 
@@ -525,18 +507,15 @@
           window.scrollTo({ top: 0, behavior: 'smooth' });
         }, 600);
       }, 1350);
+    };
+
+    function escapeHTML(str) {
+      return str.replace(/[&<>'"]/g, tag => ({
+        '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;'
+      }[tag]));
     }
 
-    // Manejo de lista de invitados
-    const STORAGE_KEY = 'posada_sanchez_fc_guests';
-
-    function getGuests() {
-      const data = localStorage.getItem(STORAGE_KEY);
-      return data ? JSON.parse(data) : [];
-    }
-
-    function renderGuests() {
-      const guests = getGuests();
+    function renderGuestsList(guests) {
       const listEl = document.getElementById('attendees-list');
       const countEl = document.getElementById('attendee-count');
       const emptyMsg = document.getElementById('empty-list-msg');
@@ -548,14 +527,14 @@
         emptyMsg.classList.remove('hidden');
       } else {
         emptyMsg.classList.add('hidden');
-        guests.forEach((guest, index) => {
+        guests.forEach((name, index) => {
           const li = document.createElement('li');
           li.className = 'flex items-center gap-3 px-4 py-2.5 rounded-xl bg-white/10 border border-white/10 text-sm font-semibold text-white';
           li.innerHTML = `
             <span class="w-6 h-6 rounded-full bg-amber-400 text-emerald-950 font-extrabold text-xs flex items-center justify-center shrink-0">
               ${index + 1}
             </span>
-            <span class="truncate">${escapeHTML(guest)}</span>
+            <span class="truncate">${escapeHTML(name)}</span>
             <span class="ml-auto text-xs">⚽</span>
           `;
           listEl.appendChild(li);
@@ -563,61 +542,99 @@
       }
     }
 
-    function handleRSVP(e) {
+    // Escuchar confirmaciones en tiempo real desde Firestore
+    const q = query(collection(db, "confirmaciones"), orderBy("creado_en", "asc"));
+    onSnapshot(q, (snapshot) => {
+      const confirmedNames = [];
+      snapshot.forEach((doc) => {
+        const data = doc.data();
+        if (data.asistencia === "yes" && data.nombre) {
+          if (!confirmedNames.some(n => n.toLowerCase() === data.nombre.toLowerCase())) {
+            confirmedNames.push(data.nombre);
+          }
+        }
+      });
+      renderGuestsList(confirmedNames);
+    }, (err) => {
+      console.error("Error escuchando confirmaciones:", err);
+    });
+
+    // Enviar confirmación RSVP
+    document.getElementById('rsvp-form').addEventListener('submit', async (e) => {
       e.preventDefault();
       const nameInput = document.getElementById('guest-name');
       const attendance = document.querySelector('input[name="attendance"]:checked').value;
       const feedback = document.getElementById('rsvp-feedback');
+      const btn = document.getElementById('rsvp-submit-btn');
       const name = nameInput.value.trim();
 
       if (!name) return;
 
-      if (attendance === 'yes') {
-        const guests = getGuests();
-        if (!guests.some(g => g.toLowerCase() === name.toLowerCase())) {
-          guests.push(name);
-          localStorage.setItem(STORAGE_KEY, JSON.stringify(guests));
+      btn.disabled = true;
+      btn.textContent = "Guardando...";
+
+      try {
+        await addDoc(collection(db, "confirmaciones"), {
+          nombre: name,
+          asistencia: attendance,
+          creado_en: serverTimestamp()
+        });
+
+        if (attendance === 'yes') {
+          feedback.textContent = `¡Excelente, ${name}! Ya estás en la alineación titular.`;
+          feedback.className = 'mt-4 p-3 rounded-xl bg-emerald-500/20 border border-emerald-400/40 text-center text-sm text-emerald-100 font-medium';
+        } else {
+          feedback.textContent = `Qué lástima, ${name}. ¡Recuerda que el que no va paga la cancha! 😉`;
+          feedback.className = 'mt-4 p-3 rounded-xl bg-red-500/20 border border-red-400/40 text-center text-sm text-red-200 font-medium';
         }
-        renderGuests();
-        feedback.textContent = `¡Excelente, ${name}! Ya estás en la alineación titular.`;
-        feedback.className = 'mt-4 p-3 rounded-xl bg-emerald-500/20 border border-emerald-400/40 text-center text-sm text-emerald-100 font-medium';
-      } else {
-        feedback.textContent = `Qué lástima, ${name}. ¡Recuerda que el que no va paga la cancha! 😉`;
+        feedback.classList.remove('hidden');
+        nameInput.value = '';
+      } catch (err) {
+        console.error(err);
+        feedback.textContent = "Hubo un problema al guardar tu confirmación. Intenta de nuevo.";
         feedback.className = 'mt-4 p-3 rounded-xl bg-red-500/20 border border-red-400/40 text-center text-sm text-red-200 font-medium';
+        feedback.classList.remove('hidden');
+      } finally {
+        btn.disabled = false;
+        btn.textContent = "Enviar confirmación";
       }
+    });
 
-      feedback.classList.remove('hidden');
-      nameInput.value = '';
-    }
-
-    // Manejo de nominaciones Macanazos
-    function handleMacanazo(e) {
+    // Enviar nominación anónima Macanazos
+    document.getElementById('macanazo-form').addEventListener('submit', async (e) => {
       e.preventDefault();
       const nomineeInput = document.getElementById('nominee');
       const reasonInput = document.getElementById('reason');
       const feedback = document.getElementById('macanazo-feedback');
+      const btn = document.getElementById('macanazo-submit-btn');
 
-      const macanazos = JSON.parse(localStorage.getItem('posada_macanazos') || '[]');
-      macanazos.push({
-        nominee: nomineeInput.value.trim(),
-        reason: reasonInput.value.trim(),
-        date: new Date().toISOString()
-      });
-      localStorage.setItem('posada_macanazos', JSON.stringify(macanazos));
+      const nominado = nomineeInput.value.trim();
+      const motivo = reasonInput.value.trim();
+      if (!nominado || !motivo) return;
 
-      nomineeInput.value = '';
-      reasonInput.value = '';
-      feedback.classList.remove('hidden');
-      setTimeout(() => feedback.classList.add('hidden'), 4000);
-    }
+      btn.disabled = true;
 
-    function escapeHTML(str) {
-      return str.replace(/[&<>'"]/g, tag => ({
-        '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;'
-      }[tag]));
-    }
+      try {
+        await addDoc(collection(db, "macanazos"), {
+          nominado,
+          motivo,
+          creado_en: serverTimestamp()
+        });
 
-    renderGuests();
+        nomineeInput.value = '';
+        reasonInput.value = '';
+        feedback.textContent = "🏆 ¡Nominación anónima registrada en el VAR!";
+        feedback.classList.remove('hidden');
+        setTimeout(() => feedback.classList.add('hidden'), 4000);
+      } catch (err) {
+        console.error(err);
+        feedback.textContent = "No se pudo enviar la nominación. Intenta de nuevo.";
+        feedback.className = 'mt-4 p-3 rounded-xl bg-red-500/20 border border-red-400/40 text-center text-sm text-red-200 font-medium';
+        feedback.classList.remove('hidden');
+      } finally {
+        btn.disabled = false;
+      }
+    });
   </script>
 </body>
 </html>
