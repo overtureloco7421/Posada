@@ -89,10 +89,10 @@
 
     @keyframes pulseGlow3D {
       0%, 100% {
-        filter: drop-shadow(0 12px 14px rgba(0, 0, 0, 0.55)) drop-shadow(0 0 10px rgba(251, 191, 36, 0.3));
+        filter: drop-shadow(0 12px 14px rgba(0, 0, 0, 0.55)) drop-shadow(0 0 10px rgba(251, 191, 36, 0.25));
       }
       50% {
-        filter: drop-shadow(0 14px 18px rgba(0, 0, 0, 0.65)) drop-shadow(0 0 20px rgba(251, 191, 36, 0.6));
+        filter: drop-shadow(0 14px 18px rgba(0, 0, 0, 0.65)) drop-shadow(0 0 18px rgba(251, 191, 36, 0.5));
       }
     }
 
@@ -172,68 +172,60 @@
 
         <button id="soccer-ball" onclick="kickBall()" aria-label="Patear balón para abrir invitación"
           class="ball-idle w-24 h-24 rounded-full flex items-center justify-center cursor-pointer hover:scale-105 active:scale-95 transition-transform relative z-20 focus:outline-none">
-          <svg viewBox="0 0 200 200" class="w-full h-full">
+          <svg viewBox="0 0 240 240" class="w-full h-full">
             <defs>
-              <radialGradient id="ballEdgeShade" cx="42%" cy="35%" r="65%">
-                <stop offset="0%" stop-color="rgba(255,255,255,0.18)" />
-                <stop offset="72%" stop-color="rgba(0,0,0,0)" />
-                <stop offset="100%" stop-color="rgba(0,0,0,0.35)" />
-              </radialGradient>
-              <clipPath id="classicBallClip">
-                <circle cx="100" cy="100" r="94" />
+              <clipPath id="soccerClip">
+                <circle cx="120" cy="120" r="112" />
               </clipPath>
             </defs>
 
-            <g clip-path="url(#classicBallClip)">
-              <!-- Fondo blanco base -->
-              <circle cx="100" cy="100" r="94" fill="#ffffff" />
+            <g clip-path="url(#soccerClip)">
+              <!-- Base blanca -->
+              <circle cx="120" cy="120" r="112" fill="#ffffff" />
 
-              <!-- Pentágono central oscuro -->
-              <polygon points="100,67 131,90 119,127 81,127 69,90" fill="#1e2022" />
+              <!-- Pentágono central (centro en 120,120, radio 32) -->
+              <polygon points="120,88 150.4,110.1 138.8,145.9 101.2,145.9 89.6,110.1" fill="#232527" />
 
-              <!-- Radios hacia los hexágonos -->
-              <g stroke="#1e2022" stroke-width="6.5" stroke-linecap="round">
-                <line x1="100" y1="67" x2="100" y2="43" />
-                <line x1="131" y1="90" x2="154" y2="82" />
-                <line x1="119" y1="127" x2="133" y2="147" />
-                <line x1="81" y1="127" x2="67" y2="147" />
-                <line x1="69" y1="90" x2="46" y2="82" />
+              <!-- Líneas radiales que conectan cada vértice del pentágono con el anillo de hexágonos -->
+              <g stroke="#232527" stroke-width="6.5" stroke-linecap="round">
+                <line x1="120" y1="88" x2="120" y2="57" />
+                <line x1="150.4" y1="110.1" x2="179.9" y2="100.5" />
+                <line x1="138.8" y1="145.9" x2="157.1" y2="171" />
+                <line x1="101.2" y1="145.9" x2="82.9" y2="171" />
+                <line x1="89.6" y1="110.1" x2="60.1" y2="100.5" />
               </g>
 
-              <!-- Secciones oscuras alrededor del perímetro (como en el diseño) -->
-              <!-- Superior -->
-              <path d="M 52,16 Q 100,32 148,16 L 164,34 L 134,47 L 100,43 L 66,47 L 36,34 Z" fill="#1e2022" />
-              <!-- Superior izquierda -->
-              <path d="M 10,86 L 26,48 L 46,82 L 35,115 L 14,112 Z" fill="#1e2022" />
-              <!-- Superior derecha -->
-              <path d="M 190,86 L 174,48 L 154,82 L 165,115 L 186,112 Z" fill="#1e2022" />
-              <!-- Inferior izquierda -->
-              <path d="M 24,154 L 46,125 L 67,147 L 57,176 L 38,172 Z" fill="#1e2022" />
-              <!-- Inferior derecha -->
-              <path d="M 176,154 L 154,125 L 133,147 L 143,176 L 162,172 Z" fill="#1e2022" />
-              <!-- Inferior central -->
-              <path d="M 68,188 L 86,167 L 114,167 L 132,188 Q 100,196 68,188 Z" fill="#1e2022" />
+              <!-- Gajos oscuros del borde exterior -->
+              <!-- Arriba -->
+              <path d="M 62,14 Q 120,34 178,14 L 196,38 L 156,56 L 120,57 L 84,56 L 44,38 Z" fill="#232527" />
+              <!-- Arriba izquierda -->
+              <path d="M 10,98 L 28,54 L 60.1,100.5 L 48,136 L 16,132 Z" fill="#232527" />
+              <!-- Arriba derecha -->
+              <path d="M 230,98 L 212,54 L 179.9,100.5 L 192,136 L 224,132 Z" fill="#232527" />
+              <!-- Abajo izquierda -->
+              <path d="M 28,184 L 54,150 L 82.9,171 L 70,208 L 46,204 Z" fill="#232527" />
+              <!-- Abajo derecha -->
+              <path d="M 212,184 L 186,150 L 157.1,171 L 170,208 L 194,204 Z" fill="#232527" />
+              <!-- Abajo centro -->
+              <path d="M 80,224 L 101,199 L 139,199 L 160,224 Q 120,235 80,224 Z" fill="#232527" />
 
-              <!-- Contornos de los hexágonos internos -->
-              <g fill="none" stroke="#1e2022" stroke-width="5.5" stroke-linejoin="round">
-                <!-- Hexágono superior izquierdo -->
-                <path d="M 66,47 L 100,43 L 100,67 L 69,90 L 46,82 L 36,34 Z" />
-                <!-- Hexágono superior derecho -->
-                <path d="M 100,43 L 134,47 L 164,34 L 154,82 L 131,90 L 100,67 Z" />
-                <!-- Hexágono inferior izquierdo -->
-                <path d="M 46,82 L 69,90 L 81,127 L 67,147 L 46,125 L 35,115 Z" />
-                <!-- Hexágono inferior derecho -->
-                <path d="M 131,90 L 154,82 L 165,115 L 154,125 L 133,147 L 119,127 Z" />
-                <!-- Hexágono inferior -->
-                <path d="M 81,127 L 119,127 L 133,147 L 114,167 L 86,167 L 67,147 Z" />
+              <!-- Contornos de los hexágonos circundantes -->
+              <g fill="none" stroke="#232527" stroke-width="5.5" stroke-linejoin="round">
+                <!-- Superior izquierdo -->
+                <path d="M 84,56 L 120,57 L 120,88 L 89.6,110.1 L 60.1,100.5 L 44,38 Z" />
+                <!-- Superior derecho -->
+                <path d="M 120,57 L 156,56 L 196,38 L 179.9,100.5 L 150.4,110.1 L 120,88 Z" />
+                <!-- Inferior izquierdo -->
+                <path d="M 60.1,100.5 L 89.6,110.1 L 101.2,145.9 L 82.9,171 L 54,150 L 48,136 Z" />
+                <!-- Inferior derecho -->
+                <path d="M 150.4,110.1 L 179.9,100.5 L 192,136 L 186,150 L 157.1,171 L 138.8,145.9 Z" />
+                <!-- Inferior -->
+                <path d="M 101.2,145.9 L 138.8,145.9 L 157.1,171 L 139,199 L 101,199 L 82.9,171 Z" />
               </g>
-
-              <!-- Sombra esférica sutil -->
-              <circle cx="100" cy="100" r="94" fill="url(#ballEdgeShade)" />
             </g>
 
-            <!-- Aro exterior del balón -->
-            <circle cx="100" cy="100" r="94" fill="none" stroke="#1e2022" stroke-width="6" />
+            <!-- Borde exterior nítido -->
+            <circle cx="120" cy="120" r="112" fill="none" stroke="#232527" stroke-width="6.5" />
           </svg>
         </button>
       </div>
